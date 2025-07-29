@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { foodsArray } from "./FoodsArray";
 import style from "./foods.module.css";
 import Sidebar from "./Sidebar";
@@ -7,8 +7,22 @@ const FoodMenu = () => {
   const [foods, setFoods] = useState(foodsArray);
   const [display, setDisplay] = useState(false);
   const [cart, setCart] = useState([]);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
 
-  // const show = () => setDisplay(true);
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cartItems");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+    setIsCartLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (isCartLoaded) {
+      localStorage.setItem("cartItems", JSON.stringify(cart));
+    }
+  }, [cart, isCartLoaded]);
+
   const hide = () => setDisplay(false);
 
   const addToCart = (food) => {
