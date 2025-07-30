@@ -24,6 +24,7 @@ const FoodMenu = () => {
   }, [cart, isCartLoaded]);
 
   const hide = () => setDisplay(false);
+  const show = () => setDisplay(true);
 
   const addToCart = (food) => {
     setCart((prevCart) => {
@@ -90,7 +91,12 @@ const FoodMenu = () => {
 
   return (
     <div className={style.mn}>
-      <h1>Today's Menu</h1>
+      <div className={style.nav}>
+        <h1>Today's Menu</h1>
+        <button id={style.navButton} onClick={show}>
+          Order list
+        </button>
+      </div>
       <div className={style.main}>
         {foods.map((food) => {
           const inCart = cart.find((item) => item.id === food.id);
