@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { foodsArray } from "./FoodsArray";
 import style from "./foods.module.css";
 import Sidebar from "./Sidebar";
+import image from "../assets/logo1.png";
 
 const FoodMenu = () => {
   const [foods, setFoods] = useState(foodsArray);
@@ -89,10 +90,77 @@ const FoodMenu = () => {
     );
   };
 
+  // = = = = = = = Adding new item section = = = = = = = =
+  const [modal, setModal] = useState(false);
+
+  const show2 = () => {
+    setModal(true);
+  };
+
+  const hide2 = () => {
+    setModal(false);
+  };
+
+  const [object, setObject] = useState({
+    name: "",
+    id: "",
+    description: "",
+    price: "",
+    inStock: false,
+    quantity: "",
+  });
+
+  const updateChange = (event) => {
+    const {
+      name,
+      value,
+      //  type, checked
+    } = event.target;
+
+    setObject((currentUpdate) => ({
+      ...currentUpdate,
+      [name]: name === "inStock" ? value === "true" : value,
+      // [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleAddFood = (e) => {
+    e.preventDefault();
+
+    const newFood = {
+      ...object,
+      id: Date.now().toString(),
+      // image: "../assets/logo1.png",
+      image: image,
+      price: parseFloat(object.price),
+      quantity: parseInt(object.quantity),
+    };
+
+    setFoods((prevFoods) => [...prevFoods, newFood]);
+    setModal(false);
+    setObject({
+      name: "",
+      id: "",
+      description: "",
+      price: "",
+      inStock: false,
+      quantity: "",
+    });
+  };
+
+  console.log(object);
+
+  // = = = = = = = = = = = = = = = = = = = = = = = =
+
   return (
     <div className={style.mn}>
       <div className={style.nav}>
-        <h1>Today's Menu</h1>
+        <h1>
+          Today's <span>Menu</span>
+        </h1>
+        <button id={style.addButton} onClick={show2}>
+          Add new item
+        </button>
         <button id={style.navButton} onClick={show}>
           Order list
         </button>
@@ -154,6 +222,108 @@ const FoodMenu = () => {
         decreaseQuantity={decreaseQuantity}
         foods={foods}
       />
+
+      {modal && (
+        <div className={style.mainModalCon} onClick={hide2}>
+          <div
+            className={style.modalCon}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className={style.modalHeader}>
+              <div>
+                <div>
+                  <h1 id={style.h1}>Add New Food</h1>
+                </div>
+                <div>
+                  <p>Add a new food item to your menu</p>
+                </div>
+              </div>
+              <div>
+                <button onClick={hide2} id={style.closeBtn}>
+                  X
+                </button>
+              </div>
+            </div>
+
+            <form action="" className={style.form}>
+              <div className={style.input1}>
+                <p>Food Name</p>
+                <input
+                  id={style.input}
+                  type="text"
+                  name="name"
+                  value={object.name}
+                  onChange={updateChange}
+                />
+              </div>
+              <div className={style.input2}>
+                <p>Food Description</p>
+                <textarea
+                  id={style.input}
+                  name="description"
+                  value={object.description}
+                  onChange={updateChange}
+                  // placeholder="What's this food about?"
+                ></textarea>
+              </div>
+              <div className={style.input3}>
+                <p>Price (#)</p>
+                <input
+                  id={style.input}
+                  type="number"
+                  name="price"
+                  value={object.price}
+                  onChange={updateChange}
+                />
+              </div>
+              <div className={style.input4}>
+                <p>Availability</p>
+                <div className={style.inStock}>
+                  <label id={style.label}>
+                    <input
+                      type="radio"
+                      name="inStock"
+                      value="true"
+                      onChange={updateChange}
+                    />
+                    <p>In Stock</p>
+                  </label>
+
+                  <label id={style.label}>
+                    <input
+                      // id={style.radio}
+                      type="radio"
+                      name="inStock"
+                      value="false"
+                      onChange={updateChange}
+                    />
+                    <p> Out of Stock</p>
+                  </label>
+                </div>
+              </div>
+              <div className={style.input5}>
+                <p>Quantity</p>
+                <input
+                  id={style.input}
+                  type="number"
+                  name="quantity"
+                  // value={object.quantity}
+                  onChange={updateChange}
+                />
+              </div>
+              <div className={style.input6}></div>
+            </form>
+            <div className={style.modalFooter}>
+              <button id={style.ftbutton1} onClick={hide2}>
+                Cancel
+              </button>
+              <button id={style.ftbutton2} onClick={handleAddFood}>
+                Add Food
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
