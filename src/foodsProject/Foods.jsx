@@ -3,6 +3,7 @@ import { foodsArray } from "./FoodsArray";
 import style from "./foods.module.css";
 import Sidebar from "./Sidebar";
 import image from "../assets/logo1.png";
+import { IoMdAdd } from "react-icons/io";
 
 const FoodMenu = () => {
   const [foods, setFoods] = useState(foodsArray);
@@ -152,6 +153,22 @@ const FoodMenu = () => {
 
   // = = = = = = = = = = = = = = = = = = = = = = = =
 
+  // = = = = = = = = = = delete button = = = = = = = = =
+  // const deleteFood = (id) => {
+  //   setFoods((prevFoods) => prevFoods.filter((food) => food.id !== id));
+  // };
+
+  const deleteItem = (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+    if (!confirmDelete) return;
+
+    setFoods((prevFoods) => prevFoods.filter((food) => food.id !== id));
+
+    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+  };
+
   return (
     <div className={style.mn}>
       <div className={style.nav}>
@@ -160,6 +177,7 @@ const FoodMenu = () => {
         </h1>
         <button id={style.addButton} onClick={show2}>
           Add new item
+          {/* <IoMdAdd /> */}
         </button>
         <button id={style.navButton} onClick={show}>
           Order list
@@ -191,6 +209,9 @@ const FoodMenu = () => {
                 </div>
                 <div className={style.RightSection}>
                   <img src={food.image} alt="" className={style.rsImg} />
+                  <button id={style.del} onClick={() => deleteItem(food.id)}>
+                    Delete
+                  </button>
                   <div className={style.button}>
                     <button
                       id={style.btn}
@@ -311,7 +332,9 @@ const FoodMenu = () => {
                   onChange={updateChange}
                 />
               </div>
-              <div className={style.input6}></div>
+              <div className={style.input6}>
+                {/* <input type="image" src="" alt="" /> */}
+              </div>
             </form>
             <div className={style.modalFooter}>
               <button id={style.ftbutton1} onClick={hide2}>
